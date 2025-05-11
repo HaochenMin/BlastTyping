@@ -1,0 +1,32 @@
+<html>
+<head>
+  <title>Blast Typing</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Blast Typing!</h1>
+  <p>Practice your keyboard skills by typing the letters that appear on the screen before they reach you!</p>
+  <p id="quote"></p> <!-- This will display our quote -->
+  <div>
+    <button type="button" id="start">Start</button> <!-- To start the game -->
+    <button type="button" id="quickend">End</button>
+  </div>
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <p id="endgamemsg"></p>
+      <button id="restartbtn">Restart</button>
+    </div>
+  </div>
+  <div id="leaderboard">
+    <h1>Top 5 Highest Scores</h1>
+    <ol class="highscores">
+      <li id="score1"></li>
+      <li id="score2"></li>
+      <li id="score3"></li>
+      <li id="score4"></li>
+      <li id="score5"></li>
+    </ol>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
