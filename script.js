@@ -1,17 +1,18 @@
+let letters = [];
+let letterIndex = 0;
 //Starting time for scoring purposes
 let startTime= Date.now();
 //page elements
-const typeElemend = document.getElementById('blastletter');
+const typeElement = document.getElementById('blastletter');
 const messageElement = document.getElementById('message');
-const typedValueElement = document.getElementById('typed-value');
 const modal = document.getElementById('myModal');
 const restartButton = document.getElementById('restartbtn');
 const endgameMessageElement = document.getElementById('endgamemsg');
 const leaderboard = document.querySelectorAll('.highscores li');
 const topScores = [0, 0, 0, 0, 0]; //Initializes leaderboard as all 0s
 var scoresShown = 0; //Tracker for how many scores have been recorded
+var delayBetweenLetters = 10; //TODO: Placeholder for now, max delay between letters if previous letter not typed, maybe add min delay too?
 const mapScores = new Map();
-typedValueElement.style.display="none";
 updateLeaderboard();
 
 //Closes the modal that appears after a quote is completed
@@ -105,66 +106,41 @@ function generateLetters(number) { //generates number amount of letters to type 
 
 //TODO: Update start and end functionality
 document.getElementById('start').addEventListener('click', () => {
-    // get a quote
-    const quoteIndex = Math.floor(Math.random() * quotes.length);
+    // get a list of letters for typing
+    const lettersToType = generateLetters(10); //TODO: Change # of letters based on difficulty(to be added)
     const quote = quotes[quoteIndex];
-    // Put the quote into an array of words
-    words = quote.split(' ');
+    // Put the quote into an array of letters
+    letters = quote.split('');
     // reset the word index for tracking
-    wordIndex = 0;
+    letterIndex = 0;
   
     // UI updates
-    // Create an array of span elements so we can set a class
-    const spanWords = words.map(function(word) { return `<span>${word} </span>`});
     // Convert into string and set as innerHTML on quote display
-    quoteElement.innerHTML = spanWords.join('');
-    // Highlight the first word
-    quoteElement.childNodes[0].className = 'highlight';
+    typeElement.innerHTML = letters[letterIndex]; //may require multiple elements for multiple letters at a time
     // Clear any prior messages
     messageElement.innerText = '';
   
-    // Setup the textbox
-    typedValueElement.style.display="inline-block";
-    // Clear the textbox
-    typedValueElement.value = '';
-    // set focus
-    typedValueElement.focus();
-    // set the event handler
-    typedValueElement.addEventListener('input', () => {
-      // Get the current word
-      const currentWord = words[wordIndex];
-      // get the current value
-      const typedValue = typedValueElement.value;
-    
-      if (typedValue === currentWord && wordIndex === words.length - 1) {
-        // end of sentence
-        // Display success
-        const elapsedTime = ((new Date().getTime() - startTime) / 1000);
-        replaceTime(elapsedTime);
-        const message = `CONGRATULATIONS! You finished in ${elapsedTime} seconds.`;
-        endgameMessageElement.innerText = message;
-        modal.style.display="block";
-        removeEventListener('input', typedValueElement);
-        typedValueElement.style.display="none";
-      } else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) {
-        // end of word
-        // clear the typedValueElement for the new word
-        typedValueElement.value = '';
-        // move to the next word
-        wordIndex++;
-        // reset the class name for all elements in quote
-        for (const wordElement of quoteElement.childNodes) {
-          wordElement.className = '';
+    //TODO:replace textbox with reading keyboard down input instead
+    window.addEventListener("keydown", (event) => {
+      // Get the current letter
+      const currentletter = letters[letterIndex];
+      // Get the current value
+      const typedValue = event.key;
+      // If letter is correct and is the last letter
+      if (typedValue === currentletter) {
+        //TODO: Point score function here
+        if (letterIndex === letters.length - 1) {
+          const message = 'CONGRATULATIONS! You scored TODO points!'; //move to modal?
+          endgameMessageElement.innerText = message;
+          modal.style.display="block";
+          removeEventListener('keydown', window);
+        } else {
+          typedValueElement.value ='';
+          letterIndex++;
+          //TODO: function to bypass delay and send next letter
         }
-        // highlight the new word
-        quoteElement.childNodes[wordIndex].className = 'highlight';
-      } else if (currentWord.startsWith(typedValue)) {
-        // currently correct
-        // highlight the next word
-        typedValueElement.className = '';
       } else {
-        // error state
-        typedValueElement.className = 'error';
+        //TODO: function to disable input for x amount of time
       }
     });
     // Start the timer

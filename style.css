@@ -19,7 +19,7 @@
     background-color: grey;
     z-index: 2;
 }
-#typed-value {
+#typed-value { /*remove if keyboard down works*/
     position: fixed;
     opacity: 1;
     /*uncomment to resize to whole screen*/
@@ -47,6 +47,19 @@
   body {
     background-color: rgb(3, 3, 3);
   }
+
+.spawnZone { /*Covers the whole screen for where the letters can appear from*/
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgb(0, 0, 0);
+  display: grid; /*segments into 400 grid blocks around the screen*/
+  grid-template-rows: 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5%;
+  grid-template-columns: 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5%;
+  z-index: -2;
+}
 
   .modal {
     display: none; /* Hidden by default */
