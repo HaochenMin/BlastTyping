@@ -17,6 +17,20 @@
     font-size: 24;
     border-radius: 50%;
     background-color: grey;
+    z-index: 2;
+}
+#typed-value {
+    position: fixed;
+    opacity: 1;
+    /*uncomment to resize to whole screen*/
+    /*width: 100%;
+    left: 0;
+    top: 0;
+    bottom: 0;*/
+    z-index: 1;
+}
+#quickend {
+  z-index: 2;
 }
   p {
     color: white;
@@ -37,7 +51,7 @@
   .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 3; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */

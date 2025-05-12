@@ -6,12 +6,14 @@
 <body>
   <h1>Blast Typing!</h1>
   <p>Practice your keyboard skills by typing the letters that appear on the screen before they reach you!</p>
-  <p id="quote"></p> <!-- This will display our quote -->
+  <p id="blastletter"></p> <!-- This will display the letter to type -->
+  <p id="message"></p> <!--This is for displaying any information to the player-->
   <div>
+    <input type="text" aria-label="current word" id="typed-value" />
     <button type="button" id="start">Start</button> <!-- To start the game -->
-    <button type="button" id="quickend">End</button>
+    <button type="button" id="quickend">End</button> <!--To end the game, for testing purposes-->
   </div>
-  <div id="myModal" class="modal">
+  <div id="myModal" class="modal"> <!--Popup window at the end of the game-->
     <div class="modal-content">
       <p id="endgamemsg"></p>
       <button id="restartbtn">Restart</button>
