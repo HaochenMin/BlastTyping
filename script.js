@@ -1,10 +1,11 @@
 let letters = [];
 let letterIndex = 0;
+let timeoutId;
 //Starting time for scoring purposes
 let startTime= Date.now();
 //page elements
 const typeElement = document.getElementById('blastletter');
-const messageElement = document.getElementById('message');
+const pointsElement = document.getElementById('points');
 const modal = document.getElementById('myModal');
 const restartButton = document.getElementById('restartbtn');
 const endgameMessageElement = document.getElementById('endgamemsg');
@@ -12,6 +13,7 @@ const leaderboard = document.querySelectorAll('.highscores li');
 const topScores = [0, 0, 0, 0, 0]; //Initializes leaderboard as all 0s
 var scoresShown = 0; //Tracker for how many scores have been recorded
 var delayBetweenLetters = 10; //TODO: Placeholder for now, max delay between letters if previous letter not typed, maybe add min delay too?
+var pointsTotal = 0; //Tracker for points
 const mapScores = new Map();
 updateLeaderboard();
 
@@ -43,11 +45,11 @@ function updateLeaderboard() {
 }
 
 function compareScore(newScore, scoreCheck) {//Returns true if there is no value in that slot or it is higher than the score in that ranking
-  return ((localStorage.getItem(scoreCheck) === null) || (localStorage.getItem(scoreCheck) === 'null') || (newScore < (localStorage.getItem(scoreCheck)))); 
-  //TODO: replace last check with score instead of time
+  return ((localStorage.getItem(scoreCheck) === null) || (localStorage.getItem(scoreCheck) === 'null') || (newScore > (localStorage.getItem(scoreCheck)))); 
 }
 
 function replaceScore(newScore) { //Checks if the new score is higher than the score in the ranking and increments scoresShown if less than 5
+  console.log("replacing score");
   if (compareScore(newScore, "First")){
       localStorage.setItem("Fifth", localStorage.getItem("Fourth"));
       localStorage.setItem("Fourth", localStorage.getItem("Third"));
@@ -78,7 +80,7 @@ function replaceScore(newScore) { //Checks if the new score is higher than the s
       }
       updateLeaderboard();
   }
-  else if (compareScore(newTime, "Fourth")){
+  else if (compareScore(newScore, "Fourth")){
       localStorage.setItem("Fifth", localStorage.getItem("Fourth"));
       localStorage.setItem("Fourth", newScore);
       if (scoresShown < 5) {
@@ -108,44 +110,96 @@ function generateLetters(number) { //generates number amount of letters to type 
 document.getElementById('start').addEventListener('click', () => {
     // get a list of letters for typing
     const lettersToType = generateLetters(10); //TODO: Change # of letters based on difficulty(to be added)
-    const quote = quotes[quoteIndex];
     // Put the quote into an array of letters
-    letters = quote.split('');
+    letters = lettersToType.split('');
     // reset the word index for tracking
     letterIndex = 0;
+    // reset points
+    pointsTotal = 0;
   
     // UI updates
     // Convert into string and set as innerHTML on quote display
     typeElement.innerHTML = letters[letterIndex]; //may require multiple elements for multiple letters at a time
     // Clear any prior messages
-    messageElement.innerText = '';
-  
-    //TODO:replace textbox with reading keyboard down input instead
+    pointsElement.innerText = 0;
+
+    // Function for timeout if correct letter has not been inputed in time.
+    const createTimeout = (delay) => {
+      const myFunction = () => {
+        letterIndex++;
+        if (letterIndex === letters.length - 1) {
+            const message = 'CONGRATULATIONS! You scored TODO points!'; //move to modal?
+            endgameMessageElement.innerText = message;
+            modal.style.display="block";
+            removeEventListener('keydown', window);
+            replaceScore(pointsTotal);
+        }
+        else {
+          typeElement.innerHTML = letters[letterIndex];
+          startTime = new Date().getTime();
+        }
+      };
+      timeoutId = setTimeout(myFunction, delay);
+    };
+
+    createTimeout(10000); // 10s timeout, change as needed
+    /*
+    const timeOut = setTimeout(() => {
+      // TODO: Add an effect that you did not type the letter in time, maybe a screenshake?
+      letterIndex++;
+      if (letterIndex === letters.length - 1) {
+          const message = 'CONGRATULATIONS! You scored TODO points!'; //move to modal?
+          endgameMessageElement.innerText = message;
+          modal.style.display="block";
+          removeEventListener('keydown', window);
+          replaceScore(pointsTotal);
+      }
+      else {
+        typeElement.innerHTML = letters[letterIndex];
+        startTime = new Date().getTime();
+      }
+    }, 10000);*/
+    // Read keyboard down input and compare to letter
     window.addEventListener("keydown", (event) => {
       // Get the current letter
       const currentletter = letters[letterIndex];
       // Get the current value
       const typedValue = event.key;
+      console.log(typedValue);
       // If letter is correct and is the last letter
       if (typedValue === currentletter) {
-        //TODO: Point score function here
+        clearTimeout(timeoutId);
+        const elapsedTime = ((new Date().getTime() - startTime) / 1000);
+        Addpoints(elapsedTime);
+        startTime = new Date().getTime();
         if (letterIndex === letters.length - 1) {
           const message = 'CONGRATULATIONS! You scored TODO points!'; //move to modal?
+          typeElement.innerHTML = '';
           endgameMessageElement.innerText = message;
           modal.style.display="block";
-          removeEventListener('keydown', window);
+          removeEventListener('keydown', window); //TODO: eventlistener not getting removed, causing multiple scores and dups
+          replaceScore(pointsTotal);
         } else {
-          typedValueElement.value ='';
+          clearTimeout(timeoutId);
           letterIndex++;
-          //TODO: function to bypass delay and send next letter
+          typeElement.innerHTML = letters[letterIndex];
+          createTimeout(10000);
+          //TODO: function to bypass delay and send next letter if multiple letters at a time are implemented
         }
       } else {
-        //TODO: function to disable input for x amount of time
+        // TODO: Screen effect for wrong letter, maybe screen shake?
+        // removeEventListener('keydown', window);
+        // TODO: function to disable input for x amount of time
       }
     });
     // Start the timer
     startTime = new Date().getTime();
   });
+
+  function Addpoints (elapsedTime) {
+    pointsTotal += Math.floor(100 * ((10 - elapsedTime) / 10));
+    pointsElement.innerText = pointsTotal;
+  }
 
   //Button for testing to instantly end the current quote
 document.getElementById('quickend').addEventListener('click', () => {
