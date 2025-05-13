@@ -14,6 +14,8 @@ const topScores = [0, 0, 0, 0, 0]; //Initializes leaderboard as all 0s
 var scoresShown = 0; //Tracker for how many scores have been recorded
 var delayBetweenLetters = 10; //TODO: Placeholder for now, max delay between letters if previous letter not typed, maybe add min delay too?
 var pointsTotal = 0; //Tracker for points
+var increaseFontSize = 0;
+var fontSize = 5;
 const mapScores = new Map();
 updateLeaderboard();
 
@@ -122,32 +124,43 @@ document.getElementById('start').addEventListener('click', () => {
     typeElement.innerHTML = letters[letterIndex]; //may require multiple elements for multiple letters at a time
     // Clear any prior messages
     pointsElement.innerText = 0;
-
+    typeElement.style.fontSize = "5px";
+    increaseFontSize = 1;
     createTimeout(10000); // 10s timeout, change as needed
     // Attach window event listener
     window.addEventListener("keydown", handleKeyDown);
     // Start the timer
     startTime = new Date().getTime();
+    while ((fontSize <= 50) && (increaseFontSize === 1)) { //TODO: Currently stuck in loop, FIX FIRST
+      setInterval(increaseFontOverTime, 500);
+    }
   });
 
-    // Function for timeout if correct letter has not been inputed in time.
-    const createTimeout = (delay) => {
-      const myFunction = () => {
+  function increaseFontOverTime(){
+    fontSize += 2.5;
+    typeElement.style.fontSize = fontSize + "px";
+  }
+
+  // Function for timeout if correct letter has not been inputed in time.
+  const createTimeout = (delay) => {
+    const myFunction = () => {
+      if (letterIndex === letters.length - 1) {
+          increaseFontSize = 0;
+          const message = 'CONGRATULATIONS! You scored TODO points!'; //move to modal?
+          endgameMessageElement.innerText = message;
+          modal.style.display="block";
+          window.removeEventListener('keydown', handleKeyDown);
+          replaceScore(pointsTotal);
+      }
+      else {
         letterIndex++;
-        if (letterIndex === letters.length - 1) {
-            const message = 'CONGRATULATIONS! You scored TODO points!'; //move to modal?
-            endgameMessageElement.innerText = message;
-            modal.style.display="block";
-            window.removeEventListener('keydown', handleKeyDown);
-            replaceScore(pointsTotal);
-        }
-        else {
-          typeElement.innerHTML = letters[letterIndex];
-          startTime = new Date().getTime();
-        }
-      };
-      timeoutId = setTimeout(myFunction, delay);
+        typeElement.style.fontSize = "5px";
+        typeElement.innerHTML = letters[letterIndex];
+        startTime = new Date().getTime();
+      }
     };
+    timeoutId = setTimeout(myFunction, delay);
+  };
 
   function Addpoints (elapsedTime) {
     pointsTotal += Math.floor(100 * ((10 - elapsedTime) / 10));
@@ -168,6 +181,7 @@ document.getElementById('start').addEventListener('click', () => {
         Addpoints(elapsedTime);
         startTime = new Date().getTime();
         if (letterIndex === letters.length - 1) {
+          increaseFontSize = 0;
           const message = 'CONGRATULATIONS! You scored TODO points!'; //move to modal?
           typeElement.innerHTML = '';
           endgameMessageElement.innerText = message;
@@ -176,6 +190,7 @@ document.getElementById('start').addEventListener('click', () => {
           replaceScore(pointsTotal);
         } else {
             letterIndex++;
+            typeElement.style.fontSize = "5px";
             typeElement.innerHTML = letters[letterIndex];
             createTimeout(10000);
           //TODO: function to bypass delay and send next letter if multiple letters at a time are implemented
