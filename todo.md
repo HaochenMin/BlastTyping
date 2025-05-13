@@ -1,10 +1,17 @@
 On hover and click response on buttons
+
 ~~start with 1 letter at a time, not case sensitive~~
+
 resize letters larger over time
+
 scaling difficulty with changes to time to input, case senstivity, delay between letters, and amount of letters
+
 divide screen into grids?
+
 disable input when incorrect
+
 cleanup code from events into functions 
+
 ~~fix decimals for point scoring~~
 
 ~~keyboard down for input instead?~~
