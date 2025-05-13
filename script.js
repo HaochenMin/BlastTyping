@@ -123,6 +123,13 @@ document.getElementById('start').addEventListener('click', () => {
     // Clear any prior messages
     pointsElement.innerText = 0;
 
+    createTimeout(10000); // 10s timeout, change as needed
+    // Attach window event listener
+    window.addEventListener("keydown", handleKeyDown);
+    // Start the timer
+    startTime = new Date().getTime();
+  });
+
     // Function for timeout if correct letter has not been inputed in time.
     const createTimeout = (delay) => {
       const myFunction = () => {
@@ -131,7 +138,7 @@ document.getElementById('start').addEventListener('click', () => {
             const message = 'CONGRATULATIONS! You scored TODO points!'; //move to modal?
             endgameMessageElement.innerText = message;
             modal.style.display="block";
-            removeEventListener('keydown', window);
+            window.removeEventListener('keydown', handleKeyDown);
             replaceScore(pointsTotal);
         }
         else {
@@ -142,26 +149,14 @@ document.getElementById('start').addEventListener('click', () => {
       timeoutId = setTimeout(myFunction, delay);
     };
 
-    createTimeout(10000); // 10s timeout, change as needed
-    /*
-    const timeOut = setTimeout(() => {
-      // TODO: Add an effect that you did not type the letter in time, maybe a screenshake?
-      letterIndex++;
-      if (letterIndex === letters.length - 1) {
-          const message = 'CONGRATULATIONS! You scored TODO points!'; //move to modal?
-          endgameMessageElement.innerText = message;
-          modal.style.display="block";
-          removeEventListener('keydown', window);
-          replaceScore(pointsTotal);
-      }
-      else {
-        typeElement.innerHTML = letters[letterIndex];
-        startTime = new Date().getTime();
-      }
-    }, 10000);*/
-    // Read keyboard down input and compare to letter
-    window.addEventListener("keydown", (event) => {
-      // Get the current letter
+  function Addpoints (elapsedTime) {
+    pointsTotal += Math.floor(100 * ((10 - elapsedTime) / 10));
+    pointsElement.innerText = pointsTotal;
+  }
+
+  // Read keyboard down input and compare to letter
+  function handleKeyDown(event) {
+          // Get the current letter
       const currentletter = letters[letterIndex];
       // Get the current value
       const typedValue = event.key;
@@ -177,32 +172,22 @@ document.getElementById('start').addEventListener('click', () => {
           typeElement.innerHTML = '';
           endgameMessageElement.innerText = message;
           modal.style.display="block";
-          removeEventListener('keydown', window); //TODO: eventlistener not getting removed, causing multiple scores and dups
+          window.removeEventListener('keydown', handleKeyDown);
           replaceScore(pointsTotal);
         } else {
-          clearTimeout(timeoutId);
-          letterIndex++;
-          typeElement.innerHTML = letters[letterIndex];
-          createTimeout(10000);
+            letterIndex++;
+            typeElement.innerHTML = letters[letterIndex];
+            createTimeout(10000);
           //TODO: function to bypass delay and send next letter if multiple letters at a time are implemented
         }
       } else {
         // TODO: Screen effect for wrong letter, maybe screen shake?
-        // removeEventListener('keydown', window);
         // TODO: function to disable input for x amount of time
       }
-    });
-    // Start the timer
-    startTime = new Date().getTime();
-  });
-
-  function Addpoints (elapsedTime) {
-    pointsTotal += Math.floor(100 * ((10 - elapsedTime) / 10));
-    pointsElement.innerText = pointsTotal;
   }
 
   //Button for testing to instantly end the current quote
-document.getElementById('quickend').addEventListener('click', () => {
+/*document.getElementById('quickend').addEventListener('click', () => {
   const elapsedTime = ((new Date().getTime() - startTime) / 1000);
   replaceTime(elapsedTime);
   const message = `CONGRATULATIONS! You finished in ${elapsedTime} seconds.`;
@@ -210,4 +195,4 @@ document.getElementById('quickend').addEventListener('click', () => {
   modal.style.display="block";
   removeEventListener('input', typedValueElement);
   typedValueElement.style.display="none";
-});
+});*/
