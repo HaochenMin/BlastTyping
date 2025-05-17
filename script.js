@@ -12,7 +12,7 @@ const restartButton = document.getElementById('restartbtn');
 const endgameMessageElement = document.getElementById('endgamemsg');
 const leaderboard = document.querySelectorAll('.highscores li');
 const topScores = [0, 0, 0, 0, 0]; //Initializes leaderboard as all 0s
-var scoresShown = 0; //Tracker for how many scores have been recorded
+var scoresShown = localStorage.length; //Tracker for how many scores have been recorded
 var delayBetweenLetters = 10; //TODO: Placeholder for now, max delay between letters if previous letter not typed, maybe add min delay too?
 var pointsTotal = 0; //Tracker for points
 var fontSize = 5;
@@ -175,8 +175,9 @@ document.getElementById('start').addEventListener('click', () => {
     const body = document.getElementById("spawnZone");
     const startShakeTime = new Date().getTime();
     function shake() {
-        const elapsed = Date.now() - startTime;
+        const elapsed = Date.now() - startShakeTime;
         if (elapsed > duration) {
+          console.log("elapsed passed");
           body.style.transform = ''; // Reset position
           window.addEventListener("keydown", handleKeyDown); // Reset player input
           return;
@@ -186,7 +187,6 @@ document.getElementById('start').addEventListener('click', () => {
         const offsetY = (Math.random() * intensity * 2 - intensity).toFixed(2);
         body.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
         window.removeEventListener('keydown', handleKeyDown); // Prevent player input
-        console.log("wrong input");
         requestAnimationFrame(shake);
       }
 
@@ -224,9 +224,7 @@ document.getElementById('start').addEventListener('click', () => {
           //TODO: function to bypass delay and send next letter if multiple letters at a time are implemented
         }
       } else {
-        Screenshake(1000, 5);
-        // TODO: Screen effect for wrong letter, maybe screen shake?
-        // TODO: function to disable input for x amount of time
+        Screenshake(700, 5);
       }
   }
 

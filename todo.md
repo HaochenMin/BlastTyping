@@ -6,7 +6,7 @@ On hover and click response on buttons
 
 leaderboard updating is broken, not reflecting localstorage properly
 
-Screenshake not working properly, only a short window to trigger it after letter changes
+~~Screenshake not working properly, only a short window to trigger it after letter changes~~
 
 change point system to removing points instead of adding, and show it decreasing over time
 
