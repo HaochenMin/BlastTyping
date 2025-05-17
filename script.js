@@ -24,26 +24,35 @@ restartButton.onclick =function () {
   modal.style.display = "none";
 }
 
-//Updates the leaderboard with new values
+// Updates scoreboard with localstorage values
 function updateLeaderboard() {
-  if (scoresShown == 0){ //When there are no scores to be shown, do not update topscores with localstorage or it will replace to null
-    topScores.forEach((score, j) => {
-    leaderboard[j].textContent = score;
-    });
+  // Sets scores to 0 if its null
+  if ((localStorage.getItem("First") === null) || localStorage.getItem("First") === 'null') {
+    localStorage.setItem("First", 0)
   }
-  else {
-    for (let i=1; i <= scoresShown; i++){ //When there is at least 1 score to be shown, replaces topScore elements with localstorage only if they are not null
-      mapScores.set(1, localStorage.getItem("First"));
-      mapScores.set(2, localStorage.getItem("Second"));
-      mapScores.set(3, localStorage.getItem("Third"));
-      mapScores.set(4, localStorage.getItem("Fourth"));
-      mapScores.set(5, localStorage.getItem("Fifth"));
-      topScores[i - 1] = mapScores.get(i);
-    }
-    topScores.forEach((score, j) => {
-    leaderboard[j].textContent = score;
+  if ((localStorage.getItem("Second") === null) || localStorage.getItem("Second") === 'null') {
+    localStorage.setItem("Second", 0)
+  }
+  if ((localStorage.getItem("Third") === null) || localStorage.getItem("Third") === 'null') {
+    localStorage.setItem("Third", 0)
+  }
+  if ((localStorage.getItem("Fourth") === null) || localStorage.getItem("Fourth") === 'null') {
+    localStorage.setItem("Fourth", 0)
+  }
+  if ((localStorage.getItem("Fifth") === null) || localStorage.getItem("Fifth") === 'null') {
+    localStorage.setItem("Fifth", 0)
+  }
+  for (let i=1; i <= 5; i++){ // Replaces topScore elements with localstorage
+    mapScores.set(1, localStorage.getItem("First"));
+    mapScores.set(2, localStorage.getItem("Second"));
+    mapScores.set(3, localStorage.getItem("Third"));
+    mapScores.set(4, localStorage.getItem("Fourth"));
+    mapScores.set(5, localStorage.getItem("Fifth"));
+    topScores[i - 1] = mapScores.get(i);
+  }
+  topScores.forEach((score, j) => {
+  leaderboard[j].textContent = score;
   });
-  }
 }
 
 function compareScore(newScore, scoreCheck) {//Returns true if there is no value in that slot or it is higher than the score in that ranking
@@ -51,16 +60,12 @@ function compareScore(newScore, scoreCheck) {//Returns true if there is no value
 }
 
 function replaceScore(newScore) { //Checks if the new score is higher than the score in the ranking and increments scoresShown if less than 5
-  console.log("replacing score");
   if (compareScore(newScore, "First")){
       localStorage.setItem("Fifth", localStorage.getItem("Fourth"));
       localStorage.setItem("Fourth", localStorage.getItem("Third"));
       localStorage.setItem("Third", localStorage.getItem("Second"));
       localStorage.setItem("Second", localStorage.getItem("First"));
       localStorage.setItem("First", newScore);
-      if (scoresShown < 5) {
-        scoresShown += 1;
-      }
       updateLeaderboard();
   }
   else if (compareScore(newScore, "Second")){
@@ -68,33 +73,21 @@ function replaceScore(newScore) { //Checks if the new score is higher than the s
       localStorage.setItem("Fourth", localStorage.getItem("Third"));
       localStorage.setItem("Third", localStorage.getItem("Second"));
       localStorage.setItem("Second", newScore);
-      if (scoresShown < 5) {
-        scoresShown += 1;
-      }
       updateLeaderboard();
   }
   else if (compareScore(newScore, "Third")){
       localStorage.setItem("Fifth", localStorage.getItem("Fourth"));
       localStorage.setItem("Fourth", localStorage.getItem("Third"));
       localStorage.setItem("Third", newScore);
-      if (scoresShown < 5) {
-        scoresShown += 1;
-      }
       updateLeaderboard();
   }
   else if (compareScore(newScore, "Fourth")){
       localStorage.setItem("Fifth", localStorage.getItem("Fourth"));
       localStorage.setItem("Fourth", newScore);
-      if (scoresShown < 5) {
-        scoresShown += 1;
-      }
       updateLeaderboard();
   }
   else if (compareScore(newScore, "Fifth")){
       localStorage.setItem("Fifth", newScore);
-      if (scoresShown < 5) {
-        scoresShown += 1;
-      }
       updateLeaderboard();
   }
 }
@@ -177,7 +170,6 @@ document.getElementById('start').addEventListener('click', () => {
     function shake() {
         const elapsed = Date.now() - startShakeTime;
         if (elapsed > duration) {
-          console.log("elapsed passed");
           body.style.transform = ''; // Reset position
           window.addEventListener("keydown", handleKeyDown); // Reset player input
           return;
@@ -199,7 +191,6 @@ document.getElementById('start').addEventListener('click', () => {
       const currentletter = letters[letterIndex];
       // Get the current value
       const typedValue = event.key;
-      console.log(typedValue);
       // If letter is correct and is the last letter
       if (typedValue === currentletter) {
         clearTimeout(timeoutId);
