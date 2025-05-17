@@ -10,7 +10,11 @@
     text-align: center;
     font-size: 48;
   }
-#Start {
+
+  ol {
+    text-align: center;
+  }
+#start {
     padding: 30px 60px;
     border: none;
     color: rgb(116, 69, 69);
@@ -19,18 +23,15 @@
     background-color: grey;
     z-index: 2;
 }
-#typed-value { /*remove if keyboard down works*/
-    position: fixed;
-    opacity: 1;
-    /*uncomment to resize to whole screen*/
-    /*width: 100%;
-    left: 0;
-    top: 0;
-    bottom: 0;*/
-    z-index: 1;
+
+#blastletter {
+  display: grid;
+  color: rgb(255, 255, 255);
+  grid-area: auto;
 }
-#quickend {
-  z-index: 2;
+
+#leaderboard {
+  color: white;
 }
   p {
     color: white;
@@ -54,10 +55,10 @@
   width: 100%;
   top: 0;
   left: 0;
-  background-color: rgb(71, 100, 128);
-  display: grid; /*segments into 400 grid blocks around the screen*/
-  grid-template-rows: 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5%;
-  grid-template-columns: 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5%;
+  background-color: rgb(0, 0, 0);
+  display: grid; /*segments into 144 grid blocks around the screen, reserve top 20% of screen for points UI and 20% on other sides to prevent going offscreen*/
+  grid-template-rows: 20% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 20%;
+  grid-template-columns: 20% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 5% 20%;
   z-index: -2;
 }
 
@@ -97,3 +98,5 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+  

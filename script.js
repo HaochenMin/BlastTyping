@@ -6,10 +6,14 @@ let increaseTextSizeID;
 let startTime= Date.now();
 //page elements
 const typeElement = document.getElementById('blastletter');
+const msgElement = document.getElementById('msg');
+const titleElement = document.getElementById('title');
 const pointsElement = document.getElementById('points');
 const modal = document.getElementById('myModal');
 const restartButton = document.getElementById('restartbtn');
+const startButton = document.getElementById('start');
 const endgameMessageElement = document.getElementById('endgamemsg');
+const leaderboardElement = document.getElementById('leaderboard');
 const leaderboard = document.querySelectorAll('.highscores li');
 const topScores = [0, 0, 0, 0, 0]; //Initializes leaderboard as all 0s
 var scoresShown = localStorage.length; //Tracker for how many scores have been recorded
@@ -22,6 +26,11 @@ updateLeaderboard();
 //Closes the modal that appears after a quote is completed
 restartButton.onclick =function () {
   modal.style.display = "none";
+  startButton.style.display = 'inline';
+  leaderboardElement.style.display = 'block';
+  titleElement.style.display = 'block';
+  msgElement.style.display = 'block';
+  pointsElement.style.display = 'none';
 }
 
 // Updates scoreboard with localstorage values
@@ -59,7 +68,7 @@ function compareScore(newScore, scoreCheck) {//Returns true if there is no value
   return ((localStorage.getItem(scoreCheck) === null) || (localStorage.getItem(scoreCheck) === 'null') || (newScore > (localStorage.getItem(scoreCheck)))); 
 }
 
-function replaceScore(newScore) { //Checks if the new score is higher than the score in the ranking and increments scoresShown if less than 5
+function replaceScore(newScore) { //Checks if the new score is higher than the score in the ranking
   if (compareScore(newScore, "First")){
       localStorage.setItem("Fifth", localStorage.getItem("Fourth"));
       localStorage.setItem("Fourth", localStorage.getItem("Third"));
@@ -101,8 +110,14 @@ function generateLetters(number) { //generates number amount of letters to type 
     return result;
 }
 
-//TODO: Update start and end functionality
-document.getElementById('start').addEventListener('click', () => {
+  function generateGridArea(){
+    var result = '';
+    result += (Math.floor(Math.random() * 13) + 2) + ' / ';
+    result += (Math.floor(Math.random() * 13) + 2);
+    return result;
+  }
+
+startButton.addEventListener('click', () => {
     // get a list of letters for typing
     const lettersToType = generateLetters(10); //TODO: Change # of letters based on difficulty(to be added)
     // Put the quote into an array of letters
@@ -116,14 +131,20 @@ document.getElementById('start').addEventListener('click', () => {
     // Convert into string and set as innerHTML on quote display
     typeElement.innerHTML = letters[letterIndex]; //may require multiple elements for multiple letters at a time
     // Clear any prior messages
+    pointsElement.style.display = 'block';
     pointsElement.innerText = 0;
     typeElement.style.fontSize = "5px";
+    typeElement.style.gridArea = generateGridArea();
     createTimeout(10000); // 10s timeout, change as needed
     // Attach window event listener
     window.addEventListener("keydown", handleKeyDown);
     // Start the timer
     startTime = new Date().getTime();
     increaseTextSize(200);
+    startButton.style.display = 'none';
+    leaderboardElement.style.display = 'none';
+    titleElement.style.display = 'none';
+    msgElement.style.display = 'none';
   });
   
   // Function for increasing letter size by 1 every 0.2s
@@ -151,6 +172,7 @@ document.getElementById('start').addEventListener('click', () => {
         increaseTextSize(200);
         letterIndex++;
         fontSize = 5;
+        typeElement.style.gridArea = generateGridArea();
         typeElement.innerHTML = letters[letterIndex];
         startTime = new Date().getTime();
         createTimeout(10000);
@@ -210,6 +232,7 @@ document.getElementById('start').addEventListener('click', () => {
             increaseTextSize(200);
             letterIndex++;
             fontSize = 5;
+            typeElement.style.gridArea = generateGridArea();
             typeElement.innerHTML = letters[letterIndex];
             createTimeout(10000);
           //TODO: function to bypass delay and send next letter if multiple letters at a time are implemented
@@ -218,14 +241,3 @@ document.getElementById('start').addEventListener('click', () => {
         Screenshake(700, 5);
       }
   }
-
-  //Button for testing to instantly end the current quote
-/*document.getElementById('quickend').addEventListener('click', () => {
-  const elapsedTime = ((new Date().getTime() - startTime) / 1000);
-  replaceTime(elapsedTime);
-  const message = `CONGRATULATIONS! You finished in ${elapsedTime} seconds.`;
-  endgameMessageElement.innerText = message;
-  modal.style.display="block";
-  removeEventListener('input', typedValueElement);
-  typedValueElement.style.display="none";
-});*/

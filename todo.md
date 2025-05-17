@@ -4,7 +4,7 @@ On hover and click response on buttons
 
 ~~resize letters larger over time~~
 
-leaderboard updating is broken, not reflecting localstorage properly
+~~leaderboard updating is broken, not reflecting localstorage properly~~
 
 ~~Screenshake not working properly, only a short window to trigger it after letter changes~~
 
@@ -12,9 +12,13 @@ change point system to removing points instead of adding, and show it decreasing
 
 scaling difficulty with changes to time to input, case senstivity, delay between letters, and amount of letters
 
-divide screen into grids?
+~~divide screen into grids?~~
 
-disable input when incorrect
+~~display letters in different locations around the screen (grid-area)~~
+
+Add endgame msg in modal
+
+~~disable input when incorrect~~
 
 cleanup code from events into functions 
 
@@ -26,4 +30,4 @@ docs on what i learned, what was hard etc
 
 cursor mode? 1 hand typing 1 hand on cursor?
 
-remove start
+color modes (light and dark?)
