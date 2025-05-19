@@ -161,7 +161,7 @@ startButton.addEventListener('click', () => {
     const myFunction = () => {
       clearInterval(increaseTextSizeID);
       if (letterIndex === letters.length - 1) {
-          const message = 'CONGRATULATIONS! You scored TODO points!'; //move to modal?
+          const message = `CONGRATULATIONS! You scored ${pointsTotal} points!`;
           endgameMessageElement.innerText = message;
           modal.style.display="block";
           window.removeEventListener('keydown', handleKeyDown);
@@ -221,7 +221,7 @@ startButton.addEventListener('click', () => {
         Addpoints(elapsedTime);
         startTime = new Date().getTime();
         if (letterIndex === letters.length - 1) {
-          const message = 'CONGRATULATIONS! You scored TODO points!'; //move to modal?
+          const message = `CONGRATULATIONS! You scored ${pointsTotal} points!`;
           typeElement.innerHTML = '';
           endgameMessageElement.innerText = message;
           modal.style.display="block";

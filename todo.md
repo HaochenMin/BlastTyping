@@ -16,7 +16,7 @@ scaling difficulty with changes to time to input, case senstivity, delay between
 
 ~~display letters in different locations around the screen (grid-area)~~
 
-Add endgame msg in modal
+~~Add endgame msg in modal~~
 
 ~~disable input when incorrect~~
 
